@@ -9,6 +9,7 @@ export default defineConfig({
     },
     vite: {
         server: {
+            allowedHosts: ['monitor.neurai.org'],
             proxy: {
                 '/api': 'http://backend:3344'
             }
