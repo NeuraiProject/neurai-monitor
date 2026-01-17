@@ -1,0 +1,39 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Domain Monitor Dashboard">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
+      <div class="bg-white p-2 rounded-2xl shadow-[0_0_15px_rgba(0,0,0,0.4)] flex flex-wrap justify-center items-center gap-4 mx-auto max-w-fit">
+          
+          <!-- View Toggle Switch -->
+          <label class="flex items-center gap-2 cursor-pointer group pl-2 pr-4 border-r border-gray-100">
+              <span class="text-xs font-semibold text-gray-500 uppercase tracking-wider group-hover:text-gray-700">Compact</span>
+              <div class="relative">
+                  <input type="checkbox" id="view-toggle" class="sr-only peer">
+                  <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
+              </div>
+          </label>
+
+                    <!-- Filter Buttons (generated dynamically) -->
+                    <div id="filter-section" class="hidden flex items-center gap-2">
+                        <div id="filter-mobile" class="relative sm:hidden">
+                            <div class="flex items-center gap-2 text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                <span id="filter-mobile-label" class="text-gray-700">ALL</span>
+                                <span class="text-gray-400">:</span>
+                                <button id="filter-mobile-toggle" class="text-gray-500 hover:text-gray-700">-- Filters ---</button>
+                            </div>
+                            <div id="filter-mobile-menu" class="hidden absolute left-0 top-full mt-2 w-48 rounded-xl bg-white shadow-lg border border-gray-200 p-2 flex flex-col gap-1 z-20"></div>
+                        </div>
+                        <div id="filter-buttons" class="hidden sm:flex gap-2"></div>
+                    </div>
+      </div>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-8 mt-8" id="domain-grid">
+    <!-- content will be injected via JS -->
+    <div class="col-span-full text-center py-20 text-gray-400 font-light">Loading domains...</div>
+  </div>
+</Layout>
+
+<script is:inline src="/scripts/dashboard.js"></script>

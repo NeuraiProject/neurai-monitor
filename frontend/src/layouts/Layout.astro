@@ -1,0 +1,43 @@
+---
+import '../styles/theme.css';
+
+interface Props {
+	title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+		<link rel="icon" type="image/png" href="/neurai-logo.png" />
+		<meta name="generator" content={Astro.generator} />
+		<title>{title}</title>
+	</head>
+	<body class="bg-gray-50 text-gray-900 min-h-screen flex flex-col">
+		<header class="bg-white shadow-[0_0_15px_rgba(0,0,0,0.4)] py-2 px-6 flex justify-between items-center sticky top-0 z-50">
+			<div class="flex items-center gap-3">
+                <img src="/neurai-logo.png" alt="Neurai Logo" class="w-8 h-8" />
+				<h1 class="text-lg font-bold tracking-tight text-primary-700">Neurai Monitor</h1>
+			</div>
+            <div id="last-updated" class="text-xs font-bold text-gray-500 uppercase tracking-wide">
+                Updating...
+            </div>
+		</header>
+		
+		<main class="flex-grow container mx-auto px-4 py-8">
+			<slot />
+		</main>
+
+		<footer class="text-center py-4 text-xs text-gray-400">
+			&copy; {new Date().getFullYear()} by Neuraiproject
+		</footer>
+	</body>
+	</body>
+</html>
