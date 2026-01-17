@@ -58,7 +58,7 @@ const THEME = {
             labelSize: 'text-[10px]',
             barGap: 'gap-[2px]',
             barPadding: 'p-[4px]',
-            cubeSize: 'w-[9px] h-[9px]'
+            cubeSize: 'w-[8px] h-[8px] md:w-[9px] md:h-[9px]'
         },
         compact: {
             padding: 'p-2',
