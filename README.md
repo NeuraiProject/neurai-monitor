@@ -2,6 +2,9 @@
 
 Neurai Monitor is a robust, self-hosted monitoring solution designed to track the availability and SSL status of network infrastructure. It specifically supports standard websites (HTTP/HTTPS) and ElectrumX servers (SSL/WSS), providing a real-time responsive dashboard with historical uptime visualization.
 
+<img width="1743" height="1190" alt="image" src="https://github.com/user-attachments/assets/248c653a-f96d-4f51-9385-02cf9d0a18d0" />
+
+
 ## Features
 
 -   **Multi-Protocol Support**: Monitors `http://`, `https://`, `ssl://`, and `wss://` endpoints.
