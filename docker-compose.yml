@@ -67,3 +67,11 @@ services:
         max-size: "50m"
         max-file: "5"
         compress: "true"
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+    driver: local
