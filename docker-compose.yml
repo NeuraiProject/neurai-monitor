@@ -18,6 +18,12 @@ services:
         condition: service_healthy
     networks:
       - app-network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m" 
+        max-file: "5"
+        compress: "true" 
 
   frontend:
     build: ./frontend
@@ -30,6 +36,12 @@ services:
       - /app/node_modules
     networks:
       - app-network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "5"
+        compress: "true"
 
   db:
     image: postgres:18.1-alpine
@@ -49,10 +61,9 @@ services:
       - postgres_data:/var/lib/postgresql/data
     networks:
       - app-network
-
-networks:
-  app-network:
-    driver: bridge
-
-volumes:
-  postgres_data:
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "5"
+        compress: "true"
