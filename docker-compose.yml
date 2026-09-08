@@ -28,12 +28,13 @@ services:
   frontend:
     build: ./frontend
     container_name: neurai-monitor-frontend
+    # Bound to loopback only: the host's nginx reverse proxy is the sole entry
+    # point, so docker must not publish this port on the public interface.
     ports:
-      - "4321:4321"
+      - "127.0.0.1:4321:80"
     restart: unless-stopped
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules
+    depends_on:
+      - backend
     networks:
       - app-network
     logging:

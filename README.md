@@ -28,12 +28,14 @@ Neurai Monitor is a robust, self-hosted monitoring solution designed to track th
 -   **Architecture**: Modularized into `db` (Data Layer), `scheduler` (Logic Layer), and `server` (API Layer).
 
 ### Frontend
--   **Framework**: Astro (Static Site Generation + Server Side Rendering)
+-   **Framework**: Astro (Static Site Generation)
 -   **Styling**: TailwindCSS
 -   **Logic**: Vanilla JavaScript (Modularized in `dashboard.js` for performance).
+-   **Serving**: The site is built to static files at image build time and served by nginx, which also proxies `/api` to the backend over the internal Docker network.
 
 ### Infrastructure
 -   **Containerization**: Docker & Docker Compose
+-   **Web Server**: nginx (static assets + API reverse proxy)
 
 ---
 
@@ -76,8 +78,31 @@ Neurai Monitor is a robust, self-hosted monitoring solution designed to track th
     This will build the images and start the PostgreSQL database, Backend API, and Frontend dashboard.
 
 ### Accessing the Dashboard
-Open your browser and navigate to:
-**http://localhost:4321**
+The frontend is published on the loopback interface only (`127.0.0.1:4321`), so it is **not reachable from outside the host**. From the host machine itself:
+
+**http://127.0.0.1:4321**
+
+### Exposing it publicly (reverse proxy)
+To serve the dashboard on a public domain, put a reverse proxy (nginx, Caddy, Traefik...) on the host and point it at the loopback port. Minimal nginx example:
+
+```nginx
+server {
+    listen 80;
+    server_name monitor.example.org;
+
+    location / {
+        proxy_pass http://127.0.0.1:4321;
+        proxy_set_header Host              $host;
+        proxy_set_header X-Real-IP         $remote_addr;
+        proxy_set_header X-Forwarded-For   $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
+```
+
+Handle TLS at this layer (e.g. with certbot). The `/api` path needs no special rule: it is proxied to the backend by the container's own nginx.
+
+> **Note**: binding to `127.0.0.1` matters because Docker inserts its own iptables rules ahead of UFW, so a plain `4321:80` mapping would be publicly reachable even with a restrictive host firewall.
 
 ---
 
@@ -91,6 +116,20 @@ Open your browser and navigate to:
     docker compose restart backend
     ```
     *Note: The dashboard only shows domains listed in `backend/domains`, even if older entries exist in the database. New domains appear after the next scheduled check (within 15 minutes).*
+
+### Updating the Frontend
+The frontend is compiled into its image, so changes to `frontend/` require a rebuild (a restart alone is not enough):
+```bash
+docker compose up -d --build frontend
+```
+*The backend is bind-mounted from the host, so it only needs `docker compose restart backend`.*
+
+### Local Development
+To run the Astro dev server against a running stack:
+```bash
+cd frontend && npm install && npm run dev
+```
+It serves on `http://localhost:4321` and proxies `/api` to `localhost:3344`, so the backend port must be reachable on the host (add a temporary `ports: ["127.0.0.1:3344:3344"]` to the `backend` service). Never expose the dev server publicly: it can serve arbitrary files from the container.
 
 ### Backup & Restore
 
@@ -113,7 +152,6 @@ To check the logs for debugging or verification:
 docker compose logs -f
 
 # View specific service logs
-docker compose logs -f syncer
 docker compose logs -f backend
 docker compose logs -f frontend
 ```

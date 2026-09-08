@@ -8,10 +8,11 @@ export default defineConfig({
         port: 4321
     },
     vite: {
+        // Dev-server only. In production the site is built to static files and
+        // served by nginx, which proxies /api to the backend (see frontend/nginx.conf).
         server: {
-            allowedHosts: ['monitor.neurai.org'],
             proxy: {
-                '/api': 'http://backend:3344'
+                '/api': 'http://localhost:3344'
             }
         }
     },
